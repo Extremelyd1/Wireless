@@ -13,18 +13,18 @@ namespace Wireless.Tiles
 			{
 				if(WirelessWorld.Links.ContainsKey(new Point16(i, j)))
 				{
-					Main.LocalPlayer.showItemIcon = true;
+					Main.LocalPlayer.cursorItemIconEnabled = true;
 					Main.LocalPlayer.noThrow = 2;
 					
 					int itemType = Main.LocalPlayer.HeldItem.type;
 					if(itemType != ModContent.ItemType<Items.WirelessRemote>() && itemType != ModContent.ItemType<Items.CoordinateConfigurator>())
-						Main.LocalPlayer.showItemIcon2 = mod.ItemType(GetType().Name);
+						Main.LocalPlayer.cursorItemIconID = ModContent.ItemType<Items.WirelessTransceiver>();
 				}
 				else
 				{
 					int itemType = Main.LocalPlayer.HeldItem.type;
 					if(itemType == ModContent.ItemType<Items.WirelessRemote>() || itemType == ModContent.ItemType<Items.CoordinateConfigurator>())
-						Main.LocalPlayer.showItemIcon = true;
+						Main.LocalPlayer.cursorItemIconEnabled = true;
 				}
 			}
 		}

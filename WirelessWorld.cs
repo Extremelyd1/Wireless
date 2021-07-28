@@ -8,19 +8,14 @@ using Terraria.ModLoader.IO;
 
 namespace Wireless
 {
-	public class WirelessWorld : ModWorld
+	public class WirelessWorld : ModSystem
 	{
-		public static Dictionary<Point16, Point16> Links;
-		
-		public override void Initialize()
-		{
-			Links = new Dictionary<Point16, Point16>();
-		}
+		public static Dictionary<Point16, Point16> Links = new();
 		
 		//Don't ask me why I'm torturing myself by doing it this way...
 		//I could've just used an int array...
 		//Or a list of bytes... But I guess I'm just masochistic :/
-		public override TagCompound Save()
+		public override TagCompound SaveWorldData()
 		{
 			byte[] bytes = new byte[Links.Count * 8];
 			int i = 0;
@@ -42,7 +37,7 @@ namespace Wireless
 			};
 		}
 		
-		public override void Load(TagCompound tag)
+		public override void LoadWorldData(TagCompound tag)
 		{
 //			Wireless.Log("LOAD");
 			
@@ -55,23 +50,7 @@ namespace Wireless
 				Links.Add(transmitter, receiver);
 			}
 		}
-		
-		public override void LoadLegacy(BinaryReader reader)
-		{
-//			Wireless.Log("LOAD LEGACY");
-			
-			int version = reader.ReadInt32();
-			
-			int linksCount = reader.ReadInt32();
-			for(int i = 0; i < linksCount; i++)
-			{
-				var transmitter = new Point16(reader.ReadInt16(), reader.ReadInt16());
-				var receiver = new Point16(reader.ReadInt16(), reader.ReadInt16());
-//				Wireless.Log("{0}, {1}", transmitter, receiver);
-				Links.Add(transmitter, receiver);
-			}
-		}
-		
+
 		public override void NetSend(BinaryWriter writer)
 		{
 			writer.Write(Links.Count);

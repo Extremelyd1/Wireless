@@ -15,23 +15,18 @@ namespace Wireless.Items
 	{
 		protected Point16 Coordinates = Point16.NegativeOne;
 		
-		public override bool CloneNewInstances
-		{
-			get { return true; }
-		}
-		
 		public override void SetDefaults()
 		{
-			item.width = 14;
-			item.height = 30;
-			item.useAnimation = 30;
-			item.useTime = 30;
-			item.UseSound = SoundID.Item1;
-			item.useStyle = 1;
-			item.value = Item.buyPrice(0, 10);
-			item.rare = 5;
-			item.mech = true;
-			item.material = true;
+			Item.width = 14;
+			Item.height = 30;
+			Item.useAnimation = 30;
+			Item.useTime = 30;
+			Item.UseSound = SoundID.Item1;
+			Item.useStyle = 1;
+			Item.value = Item.buyPrice(0, 10);
+			Item.rare = 5;
+			Item.mech = true;
+			Item.material = true;
 		}
 		
 		public override bool CanUseItem(Player player)
@@ -40,7 +35,7 @@ namespace Wireless.Items
 			return WirelessUtils.DoesPlayerReach(player) && (WirelessUtils.IsTransmitter(tileClicked) || WirelessUtils.IsReceiver(tileClicked));
 		}
 		
-		public override bool UseItem(Player player)
+		public override bool? UseItem(Player player)
 		{
 			var tileClicked = new Point16(Player.tileTargetX, Player.tileTargetY);
 			if(Main.tile[Player.tileTargetX, Player.tileTargetY].type == ModContent.TileType<Tiles.WirelessTransceiver>())
@@ -78,7 +73,7 @@ namespace Wireless.Items
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
 			if(Coordinates != Point16.NegativeOne)
-				tooltips.Insert(3, new TooltipLine(mod, "LinkingCoord", Language.GetTextValue("Mods.Wireless.StoredCoords", Coordinates)));
+				tooltips.Insert(3, new TooltipLine(Mod, "LinkingCoord", Language.GetTextValue("Mods.Wireless.StoredCoords", Coordinates)));
 		}
 		
 		public override void NetSend(BinaryWriter writer)
@@ -87,7 +82,7 @@ namespace Wireless.Items
 			writer.Write(Coordinates.Y);
 		}
 		
-		public override void NetRecieve(BinaryReader reader)
+		public override void NetReceive(BinaryReader reader)
 		{
 			Coordinates = new Point16(reader.ReadInt16(), reader.ReadInt16());
 		}
